@@ -2,10 +2,22 @@ import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
-  const [initialMinutes, setInitialMinutes] = useState(5);
-  const [initialSeconds, setInitialSeconds] = useState(0);
-  const [startSoundMinutes, setStartSoundMinutes] = useState(5);
-  const [startSoundSeconds, setStartSoundSeconds] = useState(0);
+  const [initialMinutes, setInitialMinutes] = useState(() => {
+    const savedMinutes = localStorage.getItem('initialMinutes');
+    return savedMinutes ? parseInt(savedMinutes, 10) : 5;
+  });
+  const [initialSeconds, setInitialSeconds] = useState(() => {
+    const savedSeconds = localStorage.getItem('initialSeconds');
+    return savedSeconds ? parseInt(savedSeconds, 10) : 0;
+  });
+  const [startSoundMinutes, setStartSoundMinutes] = useState(() => {
+    const savedStartSoundMinutes = localStorage.getItem('startSoundMinutes');
+    return savedStartSoundMinutes ? parseInt(savedStartSoundMinutes, 10) : 5;
+  });
+  const [startSoundSeconds, setStartSoundSeconds] = useState(() => {
+    const savedStartSoundSeconds = localStorage.getItem('startSoundSeconds');
+    return savedStartSoundSeconds ? parseInt(savedStartSoundSeconds, 10) : 0;
+  });
 
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(initialSeconds);
@@ -16,6 +28,16 @@ function App() {
 
   const totalInitialSeconds = initialMinutes * 60 + initialSeconds;
   const startSoundTotalSeconds = startSoundMinutes * 60 + startSoundSeconds;
+
+  useEffect(() => {
+    localStorage.setItem('initialMinutes', initialMinutes.toString());
+    localStorage.setItem('initialSeconds', initialSeconds.toString());
+  }, [initialMinutes, initialSeconds]);
+
+  useEffect(() => {
+    localStorage.setItem('startSoundMinutes', startSoundMinutes.toString());
+    localStorage.setItem('startSoundSeconds', startSoundSeconds.toString());
+  }, [startSoundMinutes, startSoundSeconds]);
 
   useEffect(() => {
     let interval: number | undefined = undefined;
