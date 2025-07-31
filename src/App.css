@@ -1,0 +1,34 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.timer-display {
+  font-size: 10rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.controls {
+  margin-bottom: 2rem;
+}
+
+.control-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  margin-right: 0.5rem;
+}
+
+input {
+  width: 60px;
+  text-align: right;
+}
+
+button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+}
