@@ -30,20 +30,10 @@ function App() {
   const startSoundTotalSeconds = startSoundMinutes * 60 + startSoundSeconds;
 
   useEffect(() => {
-    localStorage.setItem('initialMinutes', initialMinutes.toString());
-    localStorage.setItem('initialSeconds', initialSeconds.toString());
-  }, [initialMinutes, initialSeconds]);
-
-  useEffect(() => {
-    localStorage.setItem('startSoundMinutes', startSoundMinutes.toString());
-    localStorage.setItem('startSoundSeconds', startSoundSeconds.toString());
-  }, [startSoundMinutes, startSoundSeconds]);
-
-  useEffect(() => {
     let interval: number | undefined = undefined;
 
     if (isActive) {
-      interval = setInterval(() => {
+      interval = window.setInterval(() => {
         const totalSeconds = minutes * 60 + seconds;
         if (totalSeconds > 0) {
           const newTotalSeconds = totalSeconds - 1;
@@ -116,14 +106,22 @@ function App() {
           <input
             type="number"
             value={initialMinutes}
-            onChange={(e) => setInitialMinutes(parseInt(e.target.value, 10))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setInitialMinutes(value);
+              localStorage.setItem('initialMinutes', value.toString());
+            }}
             min="0"
           />
           <span>min</span>
           <input
             type="number"
             value={initialSeconds}
-            onChange={(e) => setInitialSeconds(parseInt(e.target.value, 10))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setInitialSeconds(value);
+              localStorage.setItem('initialSeconds', value.toString());
+            }}
             min="0"
             max="59"
           />
@@ -134,14 +132,22 @@ function App() {
           <input
             type="number"
             value={startSoundMinutes}
-            onChange={(e) => setStartSoundMinutes(parseInt(e.target.value, 10))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setStartSoundMinutes(value);
+              localStorage.setItem('startSoundMinutes', value.toString());
+            }}
             min="0"
           />
           <span>min</span>
           <input
             type="number"
             value={startSoundSeconds}
-            onChange={(e) => setStartSoundSeconds(parseInt(e.target.value, 10))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setStartSoundSeconds(value);
+              localStorage.setItem('startSoundSeconds', value.toString());
+            }}
             min="0"
             max="59"
           />
@@ -158,8 +164,8 @@ function App() {
         <button onClick={handleReset}>Reset</button>
       </div>
 
-      <audio ref={startAudioRef} src="start.mp3" preload="auto"></audio>
-      <audio ref={endAudioRef} src="end.mp3" preload="auto"></audio>
+      <audio ref={startAudioRef} src={import.meta.env.BASE_URL + "start.mp3"} preload="auto"></audio>
+      <audio ref={endAudioRef} src={import.meta.env.BASE_URL + "end.mp3"} preload="auto"></audio>
     </div>
   );
 }
