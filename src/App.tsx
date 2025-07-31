@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
@@ -33,6 +33,7 @@ function App() {
           }
           if (newTotalSeconds === 0) {
             endAudioRef.current?.play();
+            setIsActive(false); // タイマーが0になった瞬間にisActiveをfalseにする
           }
         } else {
           setIsActive(false);
@@ -46,12 +47,22 @@ function App() {
   }, [isActive, minutes, seconds, startSoundTotalSeconds, initialMinutes, initialSeconds]);
 
   const handleStart = () => {
-    setMinutes(initialMinutes);
-    setSeconds(initialSeconds);
-    setIsActive(true);
-    
-    if (totalInitialSeconds === startSoundTotalSeconds) {
-      startAudioRef.current?.play();
+    if (isActive) {
+      return; // Already active, do nothing
+    }
+
+    // If the timer is at its initial state OR if it has reached 0, start from initial time
+    if ((minutes === initialMinutes && seconds === initialSeconds) || (minutes === 0 && seconds === 0)) {
+      setMinutes(initialMinutes);
+      setSeconds(initialSeconds);
+      setIsActive(true);
+      // Play start sound immediately if initial time is also the start sound time
+      if (totalInitialSeconds === startSoundTotalSeconds) {
+        startAudioRef.current?.play();
+      }
+    } else {
+      // If the timer is paused at a non-initial, non-zero time, resume from current time
+      setIsActive(true);
     }
   };
 
@@ -117,13 +128,16 @@ function App() {
       </div>
 
       <div>
-        <button onClick={handleStart}>Start</button>
-        <button onClick={handleStop}>Stop</button>
+        {!isActive ? (
+          <button onClick={handleStart}>Start</button>
+        ) : (
+          <button onClick={handleStop}>Stop</button>
+        )}
         <button onClick={handleReset}>Reset</button>
       </div>
 
-      <audio ref={startAudioRef} src="/start.mp3" preload="auto"></audio>
-      <audio ref={endAudioRef} src="/end.mp3" preload="auto"></audio>
+      <audio ref={startAudioRef} src="start.mp3" preload="auto"></audio>
+      <audio ref={endAudioRef} src="end.mp3" preload="auto"></audio>
     </div>
   );
 }
