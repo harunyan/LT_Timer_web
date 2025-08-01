@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
+import Settings from './Settings';
 
 function App() {
   const [initialMinutes, setInitialMinutes] = useState(() => {
@@ -18,16 +19,28 @@ function App() {
     const savedStartSoundSeconds = localStorage.getItem('startSoundSeconds');
     return savedStartSoundSeconds ? parseInt(savedStartSoundSeconds, 10) : 0;
   });
+  const [remindMinutes, setRemindMinutes] = useState(() => {
+    const savedRemindMinutes = localStorage.getItem('remindMinutes');
+    return savedRemindMinutes ? parseInt(savedRemindMinutes, 10) : 1;
+  });
+  const [remindSeconds, setRemindSeconds] = useState(() => {
+    const savedRemindSeconds = localStorage.getItem('remindSeconds');
+    return savedRemindSeconds ? parseInt(savedRemindSeconds, 10) : 0;
+  });
 
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(false);
+  const [characterActive, setCharacterActive] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const startAudioRef = useRef<HTMLAudioElement>(null);
   const endAudioRef = useRef<HTMLAudioElement>(null);
+  const remindAudioRef = useRef<HTMLAudioElement>(null);
 
   const totalInitialSeconds = initialMinutes * 60 + initialSeconds;
   const startSoundTotalSeconds = startSoundMinutes * 60 + startSoundSeconds;
+  const remindSoundTotalSeconds = remindMinutes * 60 + remindSeconds;
 
   useEffect(() => {
     let interval: number | undefined = undefined;
@@ -42,10 +55,15 @@ function App() {
 
           if (newTotalSeconds === startSoundTotalSeconds) {
             startAudioRef.current?.play();
+            setCharacterActive(true); // キャラクターをアクティブにする
+          }
+          if (newTotalSeconds === remindSoundTotalSeconds) {
+            remindAudioRef.current?.play();
           }
           if (newTotalSeconds === 0) {
             endAudioRef.current?.play();
             setIsActive(false); // タイマーが0になった瞬間にisActiveをfalseにする
+            setCharacterActive(false); // キャラクターを非アクティブにする
           }
         } else {
           setIsActive(false);
@@ -86,6 +104,7 @@ function App() {
     setIsActive(false);
     setMinutes(initialMinutes);
     setSeconds(initialSeconds);
+    setCharacterActive(false); // キャラクターをリセットする
   };
 
   return (
@@ -96,63 +115,11 @@ function App() {
         ) : (
           <>
             {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+            <div className={`character-container ${characterActive ? 'active' : ''}`}>
+              <div className="loading-dots"></div>
+            </div>
           </>
         )}
-      </div>
-
-      <div className="controls">
-        <div className="control-group">
-          <label>Start Time:</label>
-          <input
-            type="number"
-            value={initialMinutes}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setInitialMinutes(value);
-              localStorage.setItem('initialMinutes', value.toString());
-            }}
-            min="0"
-          />
-          <span>min</span>
-          <input
-            type="number"
-            value={initialSeconds}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setInitialSeconds(value);
-              localStorage.setItem('initialSeconds', value.toString());
-            }}
-            min="0"
-            max="59"
-          />
-          <span>sec</span>
-        </div>
-        <div className="control-group">
-          <label>Play Start Sound at:</label>
-          <input
-            type="number"
-            value={startSoundMinutes}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setStartSoundMinutes(value);
-              localStorage.setItem('startSoundMinutes', value.toString());
-            }}
-            min="0"
-          />
-          <span>min</span>
-          <input
-            type="number"
-            value={startSoundSeconds}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setStartSoundSeconds(value);
-              localStorage.setItem('startSoundSeconds', value.toString());
-            }}
-            min="0"
-            max="59"
-          />
-          <span>sec</span>
-        </div>
       </div>
 
       <div>
@@ -162,10 +129,30 @@ function App() {
           <button onClick={handleStop}>Stop</button>
         )}
         <button onClick={handleReset}>Reset</button>
+        <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
       <audio ref={startAudioRef} src={import.meta.env.BASE_URL + "start.mp3"} preload="auto"></audio>
       <audio ref={endAudioRef} src={import.meta.env.BASE_URL + "end.mp3"} preload="auto"></audio>
+      <audio ref={remindAudioRef} src={import.meta.env.BASE_URL + "remind.mp3"} preload="auto"></audio>
+
+      {showSettings && (
+        <Settings
+          initialMinutes={initialMinutes}
+          setInitialMinutes={setInitialMinutes}
+          initialSeconds={initialSeconds}
+          setInitialSeconds={setInitialSeconds}
+          startSoundMinutes={startSoundMinutes}
+          setStartSoundMinutes={setStartSoundMinutes}
+          startSoundSeconds={startSoundSeconds}
+          setStartSoundSeconds={setStartSoundSeconds}
+          remindMinutes={remindMinutes}
+          setRemindMinutes={setRemindMinutes}
+          remindSeconds={remindSeconds}
+          setRemindSeconds={setRemindSeconds}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
     </div>
   );
 }
