@@ -78,20 +78,20 @@ function App() {
 
   const handleStart = () => {
     if (isActive) {
-      return; // Already active, do nothing
+      return; // すでにアクティブな場合は何もしない
     }
 
-    // If the timer is at its initial state OR if it has reached 0, start from initial time
+    // タイマーが初期状態または0に達した場合、初期時間から開始します
     if ((minutes === initialMinutes && seconds === initialSeconds) || (minutes === 0 && seconds === 0)) {
       setMinutes(initialMinutes);
       setSeconds(initialSeconds);
       setIsActive(true);
-      // Play start sound immediately if initial time is also the start sound time
+      // 初期時間と開始音の時間が同じ場合は、すぐに開始音を再生します
       if (totalInitialSeconds === startSoundTotalSeconds) {
         startAudioRef.current?.play();
       }
     } else {
-      // If the timer is paused at a non-initial, non-zero time, resume from current time
+      // タイマーが初期状態でも0でもない一時停止中の場合、現在の時間から再開します
       setIsActive(true);
     }
   };
@@ -111,10 +111,12 @@ function App() {
     <div className="App">
       <div className="timer-display">
         {minutes === 0 && seconds === 0 ? (
-          <span style={{ color: 'red' }}>Time is up</span>
+          <span className="time-is-up" style={{ color: 'red' }}>Time is up</span>
         ) : (
           <>
-            {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+            {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.split('').map((char, index) => (
+              <span key={index} className="digit">{char}</span>
+            ))}
             <div className={`character-container ${characterActive ? 'active' : ''}`}>
               <div className="loading-dots"></div>
             </div>
@@ -122,7 +124,7 @@ function App() {
         )}
       </div>
 
-      <div>
+      <div className="controls">
         {!isActive ? (
           <button onClick={handleStart}>Start</button>
         ) : (

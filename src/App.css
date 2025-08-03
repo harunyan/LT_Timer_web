@@ -1,19 +1,44 @@
 #root {
-  max-width: 1280px;
+  /*- max-width: 1280px; -*/
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0; /* Remove padding to use full space */
   text-align: center;
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
 }
 
 .timer-display {
-  font-size: 10rem;
+  font-size: min(30vw, 80vh); /* ビューポートの幅と高さの小さい方を使用し、幅を優先 */
+  line-height: 1; /* 行の高さを詰める */
   font-weight: bold;
   margin-bottom: 1rem;
-  position: relative; /* For positioning the character */
+  position: relative;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* コンテンツを垂直方向に中央揃え */
+  height: min(30vw, 80vh); /* ボタンの飛び跳ねを防ぐためにコンテナの高さを固定 */
+}
+
+.digit {
+  display: inline-block;
+  width: 0.6em; /* 各文字の固定幅（必要に応じて調整） */
+  text-align: center;
+}
+
+.time-is-up {
+  font-size: min(15vw, 70vh);
+  font-family: sans-serif; /* メッセージ用にプロポーショナルフォントに戻す */
 }
 
 .controls {
   margin-bottom: 2rem;
+  position: relative; /* ボタンをクリック可能にする */
+  z-index: 10;      /* 他の要素の上に配置 */
 }
 
 .control-group {
@@ -38,14 +63,14 @@ button {
 }
 
 button:last-child {
-  margin-left: 4rem; /* Settingsボタンの左マージンを大きく */
+  margin-left: 4rem; /* 設定ボタンの左マージンを大きく */
 }
 
-/* Character animation styles */
+/* キャラクターアニメーションのスタイル */
 .character-container {
-  position: absolute; /* Relative to parent .timer-display */
+  position: absolute; /* 親要素 .timer-display に相対的に配置 */
   top: 0;
-  right: -50px; /* Adjust as needed to position relative to seconds */
+  right: -50px; /* 秒の右側に配置するように調整 */
   width: 50px;
   height: 50px;
   display: flex;
@@ -86,13 +111,13 @@ button:last-child {
   100% { transform: translate(-50%, -50%) rotate(360deg) translateX(20px); }
 }
 
-/* Settings Panel Styles */
+/* 設定パネルのスタイル */
 .settings-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #f0f0f0; /* Light mode background */
+  background-color: #f0f0f0; /* ライトモードの背景色 */
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -102,28 +127,36 @@ button:last-child {
   gap: 1rem;
 }
 
+.settings-panel .control-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .settings-panel h2 {
   margin-top: 0;
-  color: #333; /* Light mode text color */
+  color: #333; /* ライトモードのテキスト色 */
 }
 
 .settings-panel label {
-  color: #333; /* Light mode label color */
+  color: #333; /* ライトモードのラベル色 */
+  width: 200px;
+  text-align: right;
 }
 
 .settings-panel input {
-  background-color: #fff; /* Light mode input background */
-  color: #333; /* Light mode input text color */
+  background-color: #fff; /* ライトモードの入力背景色 */
+  color: #333; /* ライトモードの入力テキスト色 */
   border: 1px solid #ccc;
 }
 
 .settings-panel button {
-  background-color: #007bff; /* Light mode button background */
-  color: white; /* Light mode button text color */
+  background-color: #007bff; /* ライトモードのボタン背景色 */
+  color: white; /* ライトモードのボタンテキスト色 */
   border: none;
 }
 
-/* Dark mode styles for settings panel */
+/* 設定パネルのダークモードスタイル */
 @media (prefers-color-scheme: dark) {
   .settings-panel {
     background-color: #333;
