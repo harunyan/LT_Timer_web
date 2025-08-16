@@ -1,6 +1,6 @@
 {
   "languageName": "繁體中文",
-  "timeIsUp": "時間到！",
+  "timeIsUp": "時間到!",
   "start": "開始",
   "stop": "停止",
   "reset": "重設",
@@ -11,5 +11,8 @@
   "remindSoundLabel": "提醒時間:",
   "closeButton": "關閉",
   "minutesUnit": "分",
-  "secondsUnit": "秒"
+  "secondsUnit": "秒",
+  "startSoundFile": "jpn_start.mp3",
+  "endSoundFile": "jpn_end.mp3",
+  "remindSoundFile": "jpn_remind.mp3"
 }
