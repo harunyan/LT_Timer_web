@@ -1,3 +1,7 @@
 {
-  "timeIsUp": "Time is up"
+  "languageName": "English",
+  "timeIsUp": "Time is up!",
+  "start": "Start",
+  "stop": "Stop",
+  "reset": "Reset"
 }

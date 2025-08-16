@@ -34,6 +34,9 @@ function App() {
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [translations, setTranslations] = useState<{ [key: string]: string }>({});
+  const [language, setLanguage] = useState(() => {
+    return localStorage.getItem('language') || 'en';
+  });
 
   const startAudioRef = useRef<HTMLAudioElement>(null);
   const endAudioRef = useRef<HTMLAudioElement>(null);
@@ -44,11 +47,17 @@ function App() {
   const remindSoundTotalSeconds = remindMinutes * 60 + remindSeconds;
 
   useEffect(() => {
-    fetch(import.meta.env.BASE_URL + 'locales/en.json')
-      .then(response => response.json())
-      .then(data => setTranslations(data))
-      .catch(error => console.error('Error fetching translations:', error));
-  }, []);
+    const fetchTranslations = async () => {
+      const enTranslations = await fetch(import.meta.env.BASE_URL + 'locales/en.json').then(res => res.json());
+      if (language === 'en') {
+        setTranslations(enTranslations);
+      } else {
+        const langTranslations = await fetch(import.meta.env.BASE_URL + `locales/${language}.json`).then(res => res.json()).catch(() => ({}));
+        setTranslations({ ...enTranslations, ...langTranslations });
+      }
+    };
+    fetchTranslations();
+  }, [language]);
 
   useEffect(() => {
     let interval: number | undefined = undefined;
@@ -134,11 +143,11 @@ function App() {
 
       <div className="controls">
         {!isActive ? (
-          <button onClick={handleStart}>Start</button>
+          <button onClick={handleStart}>{translations.start || 'Start'}</button>
         ) : (
-          <button onClick={handleStop}>Stop</button>
+          <button onClick={handleStop}>{translations.stop || 'Stop'}</button>
         )}
-        <button onClick={handleReset}>Reset</button>
+        <button onClick={handleReset}>{translations.reset || 'Reset'}</button>
         <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
@@ -160,6 +169,8 @@ function App() {
           setRemindMinutes={setRemindMinutes}
           remindSeconds={remindSeconds}
           setRemindSeconds={setRemindSeconds}
+          language={language}
+          setLanguage={setLanguage}
           onClose={() => setShowSettings(false)}
         />
       )}

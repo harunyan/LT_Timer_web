@@ -1,4 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+interface Language {
+  code: string;
+  name: string;
+}
 
 interface SettingsProps {
   initialMinutes: number;
@@ -13,6 +18,8 @@ interface SettingsProps {
   setRemindMinutes: (value: number) => void;
   remindSeconds: number;
   setRemindSeconds: (value: number) => void;
+  language: string;
+  setLanguage: (language: string) => void;
   onClose: () => void; // 設定画面を閉じるためのコールバック
 }
 
@@ -29,11 +36,38 @@ const Settings: React.FC<SettingsProps> = ({
   setRemindMinutes,
   remindSeconds,
   setRemindSeconds,
+  language,
+  setLanguage,
   onClose,
 }) => {
+  const [availableLanguages, setAvailableLanguages] = useState<Language[]>([]);
+
+  useEffect(() => {
+    fetch(import.meta.env.BASE_URL + 'locales/index.json')
+      .then(response => response.json())
+      .then(data => setAvailableLanguages(data))
+      .catch(error => console.error('Error fetching language index:', error));
+  }, []);
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLanguage = e.target.value;
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
+
   return (
     <div className="settings-panel">
       <h2>Settings</h2>
+      <div className="control-group">
+        <label>Language:</label>
+        <select value={language} onChange={handleLanguageChange}>
+          {availableLanguages.map(lang => (
+            <option key={lang.code} value={lang.code}>
+              {lang.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="control-group">
         <label>Start Time:</label>
         <div>
