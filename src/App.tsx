@@ -33,6 +33,7 @@ function App() {
   const [isActive, setIsActive] = useState(false);
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [translations, setTranslations] = useState<{ [key: string]: string }>({});
 
   const startAudioRef = useRef<HTMLAudioElement>(null);
   const endAudioRef = useRef<HTMLAudioElement>(null);
@@ -41,6 +42,13 @@ function App() {
   const totalInitialSeconds = initialMinutes * 60 + initialSeconds;
   const startSoundTotalSeconds = startSoundMinutes * 60 + startSoundSeconds;
   const remindSoundTotalSeconds = remindMinutes * 60 + remindSeconds;
+
+  useEffect(() => {
+    fetch(import.meta.env.BASE_URL + 'locales/en.json')
+      .then(response => response.json())
+      .then(data => setTranslations(data))
+      .catch(error => console.error('Error fetching translations:', error));
+  }, []);
 
   useEffect(() => {
     let interval: number | undefined = undefined;
@@ -111,7 +119,7 @@ function App() {
     <div className="App">
       <div className="timer-display">
         {minutes === 0 && seconds === 0 ? (
-          <span className="time-is-up" style={{ color: 'red' }}>Time is up</span>
+          <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || 'Time is up'}</span>
         ) : (
           <>
             {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.split('').map((char, index) => (

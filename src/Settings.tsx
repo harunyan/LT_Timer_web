@@ -58,6 +58,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
             max="59"
+            step="5"
           />
           <span>sec</span>
         </div>
@@ -86,6 +87,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
             max="59"
+            step="5"
           />
           <span>sec</span>
         </div>
@@ -114,6 +116,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
             max="59"
+            step="5"
           />
           <span>sec</span>
         </div>
