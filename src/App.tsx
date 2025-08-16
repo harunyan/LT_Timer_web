@@ -34,6 +34,7 @@ function App() {
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [translations, setTranslations] = useState<{ [key: string]: string }>({});
+  const [englishTranslations, setEnglishTranslations] = useState<{ [key: string]: string }>({});
   const [language, setLanguage] = useState(() => {
     return localStorage.getItem('language') || 'en';
   });
@@ -49,6 +50,7 @@ function App() {
   useEffect(() => {
     const fetchTranslations = async () => {
       const enTranslations = await fetch(import.meta.env.BASE_URL + 'locales/en.json').then(res => res.json());
+      setEnglishTranslations(enTranslations);
       if (language === 'en') {
         setTranslations(enTranslations);
       } else {
@@ -124,6 +126,13 @@ function App() {
     setCharacterActive(false); // キャラクターをリセットする
   };
 
+  const handleAudioError = (e: React.SyntheticEvent<HTMLAudioElement, Event>, fallbackSrc: string) => {
+    const audio = e.currentTarget;
+    if (audio.src !== fallbackSrc) { // Prevent infinite loop if fallback also fails
+      audio.src = fallbackSrc;
+    }
+  };
+
   return (
     <div className="App">
       <div className="timer-display">
@@ -151,9 +160,24 @@ function App() {
         <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
-      <audio ref={startAudioRef} src={translations.startSoundFile ? import.meta.env.BASE_URL + translations.startSoundFile : ''} preload="auto"></audio>
-      <audio ref={endAudioRef} src={translations.endSoundFile ? import.meta.env.BASE_URL + translations.endSoundFile : ''} preload="auto"></audio>
-      <audio ref={remindAudioRef} src={translations.remindSoundFile ? import.meta.env.BASE_URL + translations.remindSoundFile : ''} preload="auto"></audio>
+      <audio
+        ref={startAudioRef}
+        src={translations.startSoundFile ? import.meta.env.BASE_URL + translations.startSoundFile : ''}
+        preload="auto"
+        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.startSoundFile)}
+      ></audio>
+      <audio
+        ref={endAudioRef}
+        src={translations.endSoundFile ? import.meta.env.BASE_URL + translations.endSoundFile : ''}
+        preload="auto"
+        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.endSoundFile)}
+      ></audio>
+      <audio
+        ref={remindAudioRef}
+        src={translations.remindSoundFile ? import.meta.env.BASE_URL + translations.remindSoundFile : ''}
+        preload="auto"
+        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.remindSoundFile)}
+      ></audio>
 
       {showSettings && (
         <Settings

@@ -11,5 +11,8 @@
   "remindSoundLabel": "提醒時間:",
   "closeButton": "關閉",
   "minutesUnit": "分",
-  "secondsUnit": "秒"
+  "secondsUnit": "秒",
+  "startSoundFile": "locales/sounds/zh-TW/zhtw_start.mp3",
+  "endSoundFile": "locales/sounds/zh-TW/zhtw_end.mp3",
+  "remindSoundFile": "locales/sounds/zh-TW/zhtw_remind.mp3"
 }
