@@ -12,7 +12,7 @@
   "closeButton": "關閉",
   "minutesUnit": "分",
   "secondsUnit": "秒",
-  "startSoundFile": "jpn_start.mp3",
-  "endSoundFile": "jpn_end.mp3",
-  "remindSoundFile": "jpn_remind.mp3"
+  "startSoundFile": "eng_start.mp3",
+  "endSoundFile": "eng_end.mp3",
+  "remindSoundFile": "eng_remind.mp3"
 }
