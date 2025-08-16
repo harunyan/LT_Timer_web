@@ -6,6 +6,7 @@ interface Language {
 }
 
 interface SettingsProps {
+  show: boolean;
   initialMinutes: number;
   setInitialMinutes: (value: number) => void;
   initialSeconds: number;
@@ -25,6 +26,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({
+  show,
   initialMinutes,
   setInitialMinutes,
   initialSeconds,
@@ -57,107 +59,115 @@ const Settings: React.FC<SettingsProps> = ({
     localStorage.setItem('language', newLanguage);
   };
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="settings-panel">
-      <h2>{translations.settingsTitle || 'Settings'}</h2>
-      <div className="control-group">
-        <label>{translations.languageLabel || 'Language:'}</label>
-        <select value={language} onChange={handleLanguageChange}>
-          {availableLanguages.map(lang => (
-            <option key={lang.code} value={lang.code}>
-              {lang.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="control-group">
-        <label>{translations.startTimeLabel || 'Start Time:'}</label>
-        <div>
-          <input
-            type="number"
-            value={initialMinutes}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setInitialMinutes(value);
-              localStorage.setItem('initialMinutes', value.toString());
-            }}
-            min="0"
-          />
-          <span>{translations.minutesUnit || 'min'}</span>
-          <input
-            type="number"
-            value={initialSeconds}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setInitialSeconds(value);
-              localStorage.setItem('initialSeconds', value.toString());
-            }}
-            min="0"
-            max="59"
-            step="5"
-          />
-          <span>{translations.secondsUnit || 'sec'}</span>
+    <div className={`settings-panel-wrapper ${show ? 'active' : ''}`} onClick={handleBackdropClick}>
+      <div className="settings-panel">
+        <h2>{translations.settingsTitle || 'Settings'}</h2>
+        <div className="control-group">
+          <label>{translations.languageLabel || 'Language:'}</label>
+          <select value={language} onChange={handleLanguageChange}>
+            {availableLanguages.map(lang => (
+              <option key={lang.code} value={lang.code}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
         </div>
-      </div>
-      <div className="control-group">
-        <label>{translations.startSoundLabel || 'Play Start Sound at:'}</label>
-        <div>
-          <input
-            type="number"
-            value={startSoundMinutes}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setStartSoundMinutes(value);
-              localStorage.setItem('startSoundMinutes', value.toString());
-            }}
-            min="0"
-          />
-          <span>{translations.minutesUnit || 'min'}</span>
-          <input
-            type="number"
-            value={startSoundSeconds}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setStartSoundSeconds(value);
-              localStorage.setItem('startSoundSeconds', value.toString());
-            }}
-            min="0"
-            max="59"
-            step="5"
-          />
-          <span>{translations.secondsUnit || 'sec'}</span>
+        <div className="control-group">
+          <label>{translations.startTimeLabel || 'Start Time:'}</label>
+          <div>
+            <input
+              type="number"
+              value={initialMinutes}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setInitialMinutes(value);
+                localStorage.setItem('initialMinutes', value.toString());
+              }}
+              min="0"
+            />
+            <span>{translations.minutesUnit || 'min'}</span>
+            <input
+              type="number"
+              value={initialSeconds}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setInitialSeconds(value);
+                localStorage.setItem('initialSeconds', value.toString());
+              }}
+              min="0"
+              max="59"
+              step="5"
+            />
+            <span>{translations.secondsUnit || 'sec'}</span>
+          </div>
         </div>
-      </div>
-      <div className="control-group">
-        <label>{translations.remindSoundLabel || 'Remind Sound at:'}</label>
-        <div>
-          <input
-            type="number"
-            value={remindMinutes}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setRemindMinutes(value);
-              localStorage.setItem('remindMinutes', value.toString());
-            }}
-            min="0"
-          />
-          <span>{translations.minutesUnit || 'min'}</span>
-          <input
-            type="number"
-            value={remindSeconds}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setRemindSeconds(value);
-              localStorage.setItem('remindSeconds', value.toString());
-            }}
-            min="0"
-            max="59"
-            step="5"
-          />
-          <span>{translations.secondsUnit || 'sec'}</span>
+        <div className="control-group">
+          <label>{translations.startSoundLabel || 'Play Start Sound at:'}</label>
+          <div>
+            <input
+              type="number"
+              value={startSoundMinutes}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setStartSoundMinutes(value);
+                localStorage.setItem('startSoundMinutes', value.toString());
+              }}
+              min="0"
+            />
+            <span>{translations.minutesUnit || 'min'}</span>
+            <input
+              type="number"
+              value={startSoundSeconds}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setStartSoundSeconds(value);
+                localStorage.setItem('startSoundSeconds', value.toString());
+              }}
+              min="0"
+              max="59"
+              step="5"
+            />
+            <span>{translations.secondsUnit || 'sec'}</span>
+          </div>
         </div>
+        <div className="control-group">
+          <label>{translations.remindSoundLabel || 'Remind Sound at:'}</label>
+          <div>
+            <input
+              type="number"
+              value={remindMinutes}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setRemindMinutes(value);
+                localStorage.setItem('remindMinutes', value.toString());
+              }}
+              min="0"
+            />
+            <span>{translations.minutesUnit || 'min'}</span>
+            <input
+              type="number"
+              value={remindSeconds}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                setRemindSeconds(value);
+                localStorage.setItem('remindSeconds', value.toString());
+              }}
+              min="0"
+              max="59"
+              step="5"
+            />
+            <span>{translations.secondsUnit || 'sec'}</span>
+          </div>
+        </div>
+        <button onClick={onClose}>{translations.closeButton || 'Close'}</button>
       </div>
-      <button onClick={onClose}>{translations.closeButton || 'Close'}</button>
     </div>
   );
 };

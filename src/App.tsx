@@ -179,26 +179,25 @@ function App() {
         onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.remindSoundFile)}
       ></audio>
 
-      {showSettings && (
-        <Settings
-          initialMinutes={initialMinutes}
-          setInitialMinutes={setInitialMinutes}
-          initialSeconds={initialSeconds}
-          setInitialSeconds={setInitialSeconds}
-          startSoundMinutes={startSoundMinutes}
-          setStartSoundMinutes={setStartSoundMinutes}
-          startSoundSeconds={startSoundSeconds}
-          setStartSoundSeconds={setStartSoundSeconds}
-          remindMinutes={remindMinutes}
-          setRemindMinutes={setRemindMinutes}
-          remindSeconds={remindSeconds}
-          setRemindSeconds={setRemindSeconds}
-          language={language}
-          setLanguage={setLanguage}
-          translations={translations}
-          onClose={() => setShowSettings(false)}
-        />
-      )}
+      <Settings
+        show={showSettings}
+        initialMinutes={initialMinutes}
+        setInitialMinutes={setInitialMinutes}
+        initialSeconds={initialSeconds}
+        setInitialSeconds={setInitialSeconds}
+        startSoundMinutes={startSoundMinutes}
+        setStartSoundMinutes={setStartSoundMinutes}
+        startSoundSeconds={startSoundSeconds}
+        setStartSoundSeconds={setStartSoundSeconds}
+        remindMinutes={remindMinutes}
+        setRemindMinutes={setRemindMinutes}
+        remindSeconds={remindSeconds}
+        setRemindSeconds={setRemindSeconds}
+        language={language}
+        setLanguage={setLanguage}
+        translations={translations}
+        onClose={() => setShowSettings(false)}
+      />
     </div>
   );
 }
