@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Settings from './Settings';
+import AudioPlayer from './components/AudioPlayer.tsx';
 
 function App() {
   const [initialMinutes, setInitialMinutes] = useState(() => {
@@ -126,13 +127,6 @@ function App() {
     setCharacterActive(false); // キャラクターをリセットする
   };
 
-  const handleAudioError = (e: React.SyntheticEvent<HTMLAudioElement, Event>, fallbackSrc: string) => {
-    const audio = e.currentTarget;
-    if (audio.src !== fallbackSrc) { // Prevent infinite loop if fallback also fails
-      audio.src = fallbackSrc;
-    }
-  };
-
   return (
     <div className="App">
       <div className="timer-display">
@@ -160,24 +154,21 @@ function App() {
         <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
-      <audio
-        ref={startAudioRef}
-        src={translations.startSoundFile ? import.meta.env.BASE_URL + translations.startSoundFile : ''}
-        preload="auto"
-        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.startSoundFile)}
-      ></audio>
-      <audio
-        ref={endAudioRef}
-        src={translations.endSoundFile ? import.meta.env.BASE_URL + translations.endSoundFile : ''}
-        preload="auto"
-        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.endSoundFile)}
-      ></audio>
-      <audio
-        ref={remindAudioRef}
-        src={translations.remindSoundFile ? import.meta.env.BASE_URL + translations.remindSoundFile : ''}
-        preload="auto"
-        onError={(e) => handleAudioError(e, import.meta.env.BASE_URL + englishTranslations.remindSoundFile)}
-      ></audio>
+      <AudioPlayer
+        audioRef={startAudioRef}
+        srcFile={translations.startSoundFile}
+        fallbackSrcFile={englishTranslations.startSoundFile}
+      />
+      <AudioPlayer
+        audioRef={endAudioRef}
+        srcFile={translations.endSoundFile}
+        fallbackSrcFile={englishTranslations.endSoundFile}
+      />
+      <AudioPlayer
+        audioRef={remindAudioRef}
+        srcFile={translations.remindSoundFile}
+        fallbackSrcFile={englishTranslations.remindSoundFile}
+      />
 
       <Settings
         show={showSettings}

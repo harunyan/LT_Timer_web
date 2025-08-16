@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-
-interface Language {
-  code: string;
-  name: string;
-}
+import React from 'react';
+import LanguageSelector from './components/LanguageSelector.tsx';
+import TimeInputGroup from './components/TimeInputGroup.tsx';
 
 interface SettingsProps {
   show: boolean;
@@ -22,7 +19,7 @@ interface SettingsProps {
   language: string;
   setLanguage: (language: string) => void;
   translations: { [key: string]: string };
-  onClose: () => void; // 設定画面を閉じるためのコールバック
+  onClose: () => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({
@@ -44,21 +41,6 @@ const Settings: React.FC<SettingsProps> = ({
   translations,
   onClose,
 }) => {
-  const [availableLanguages, setAvailableLanguages] = useState<Language[]>([]);
-
-  useEffect(() => {
-    fetch(import.meta.env.BASE_URL + 'locales/index.json')
-      .then(response => response.json())
-      .then(data => setAvailableLanguages(data))
-      .catch(error => console.error('Error fetching language index:', error));
-  }, []);
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = e.target.value;
-    setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
-  };
-
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -69,105 +51,46 @@ const Settings: React.FC<SettingsProps> = ({
     <div className={`settings-panel-wrapper ${show ? 'active' : ''}`} onClick={handleBackdropClick}>
       <div className="settings-panel">
         <h2>{translations.settingsTitle || 'Settings'}</h2>
-        <div className="control-group">
-          <label>{translations.languageLabel || 'Language:'}</label>
-          <div>
-            <select value={language} onChange={handleLanguageChange}>
-              {availableLanguages.map(lang => (
-                <option key={lang.code} value={lang.code}>
-                  {lang.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="control-group">
-          <label>{translations.startTimeLabel || 'Start Time:'}</label>
-          <div>
-            <input
-              type="number"
-              value={initialMinutes}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setInitialMinutes(value);
-                localStorage.setItem('initialMinutes', value.toString());
-              }}
-              min="0"
-            />
-            <span>{translations.minutesUnit || 'min'}</span>
-            <input
-              type="number"
-              value={initialSeconds}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setInitialSeconds(value);
-                localStorage.setItem('initialSeconds', value.toString());
-              }}
-              min="0"
-              max="59"
-              step="5"
-            />
-            <span>{translations.secondsUnit || 'sec'}</span>
-          </div>
-        </div>
-        <div className="control-group">
-          <label>{translations.startSoundLabel || 'Play Start Sound at:'}</label>
-          <div>
-            <input
-              type="number"
-              value={startSoundMinutes}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setStartSoundMinutes(value);
-                localStorage.setItem('startSoundMinutes', value.toString());
-              }}
-              min="0"
-            />
-            <span>{translations.minutesUnit || 'min'}</span>
-            <input
-              type="number"
-              value={startSoundSeconds}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setStartSoundSeconds(value);
-                localStorage.setItem('startSoundSeconds', value.toString());
-              }}
-              min="0"
-              max="59"
-              step="5"
-            />
-            <span>{translations.secondsUnit || 'sec'}</span>
-          </div>
-        </div>
-        <div className="control-group">
-          <label>{translations.remindSoundLabel || 'Remind Sound at:'}</label>
-          <div>
-            <input
-              type="number"
-              value={remindMinutes}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setRemindMinutes(value);
-                localStorage.setItem('remindMinutes', value.toString());
-              }}
-              min="0"
-            />
-            <span>{translations.minutesUnit || 'min'}</span>
-            <input
-              type="number"
-              value={remindSeconds}
-              onChange={(e) => {
-                const value = parseInt(e.target.value, 10);
-                setRemindSeconds(value);
-                localStorage.setItem('remindSeconds', value.toString());
-              }}
-              min="0"
-              max="59"
-              step="5"
-            />
-            <span>{translations.secondsUnit || 'sec'}</span>
-          </div>
-        </div>
+
+        <LanguageSelector
+          language={language}
+          setLanguage={setLanguage}
+          label={translations.languageLabel || 'Language:'}
+        />
+
+        <TimeInputGroup
+          label={translations.startTimeLabel || 'Initial Time:'}
+          minutes={initialMinutes}
+          setMinutes={setInitialMinutes}
+          seconds={initialSeconds}
+          setSeconds={setInitialSeconds}
+          minutesLocalStorageKey="initialMinutes"
+          secondsLocalStorageKey="initialSeconds"
+          translations={translations}
+        />
+
+        <TimeInputGroup
+          label={translations.startSoundLabel || 'Notification at:'}
+          minutes={startSoundMinutes}
+          setMinutes={setStartSoundMinutes}
+          seconds={startSoundSeconds}
+          setSeconds={setStartSoundSeconds}
+          minutesLocalStorageKey="startSoundMinutes"
+          secondsLocalStorageKey="startSoundSeconds"
+          translations={translations}
+        />
+
+        <TimeInputGroup
+          label={translations.remindSoundLabel || 'Reminder at:'}
+          minutes={remindMinutes}
+          setMinutes={setRemindMinutes}
+          seconds={remindSeconds}
+          setSeconds={setRemindSeconds}
+          minutesLocalStorageKey="remindMinutes"
+          secondsLocalStorageKey="remindSeconds"
+          translations={translations}
+        />
+
         <button onClick={onClose}>{translations.closeButton || 'Close'}</button>
       </div>
     </div>
