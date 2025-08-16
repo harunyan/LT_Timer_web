@@ -151,9 +151,9 @@ function App() {
         <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
-      <audio ref={startAudioRef} src={import.meta.env.BASE_URL + "start.mp3"} preload="auto"></audio>
-      <audio ref={endAudioRef} src={import.meta.env.BASE_URL + "end.mp3"} preload="auto"></audio>
-      <audio ref={remindAudioRef} src={import.meta.env.BASE_URL + "remind.mp3"} preload="auto"></audio>
+      <audio ref={startAudioRef} src={translations.startSoundFile ? import.meta.env.BASE_URL + translations.startSoundFile : ''} preload="auto"></audio>
+      <audio ref={endAudioRef} src={translations.endSoundFile ? import.meta.env.BASE_URL + translations.endSoundFile : ''} preload="auto"></audio>
+      <audio ref={remindAudioRef} src={translations.remindSoundFile ? import.meta.env.BASE_URL + translations.remindSoundFile : ''} preload="auto"></audio>
 
       {showSettings && (
         <Settings

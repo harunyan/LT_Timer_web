@@ -1,6 +1,6 @@
 {
   "languageName": "English",
-  "timeIsUp": "Time is Up!",
+  "timeIsUp": "Time is up!",
   "start": "Start",
   "stop": "Stop",
   "reset": "Reset",
@@ -11,5 +11,8 @@
   "remindSoundLabel": "Reminder at:",
   "closeButton": "Close",
   "minutesUnit": "min",
-  "secondsUnit": "sec"
+  "secondsUnit": "sec",
+  "startSoundFile": "eng_start.mp3",
+  "endSoundFile": "eng_end.mp3",
+  "remindSoundFile": "eng_remind.mp3"
 }
