@@ -12,7 +12,7 @@
   "closeButton": "Close",
   "minutesUnit": "min",
   "secondsUnit": "sec",
-  "startSoundFile": "eng_start.mp3",
-  "endSoundFile": "eng_end.mp3",
-  "remindSoundFile": "eng_remind.mp3"
+  "startSoundFile": "locales/sounds/en/eng_start.mp3",
+  "endSoundFile": "locales/sounds/en/eng_end.mp3",
+  "remindSoundFile": "locales/sounds/en/eng_remind.mp3"
 }
