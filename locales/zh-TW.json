@@ -3,5 +3,13 @@
   "timeIsUp": "時間到！",
   "start": "開始",
   "stop": "停止",
-  "reset": "重設"
+  "reset": "重設",
+  "settingsTitle": "設定",
+  "languageLabel": "語言:",
+  "startTimeLabel": "初始時間:",
+  "startSoundLabel": "通知時間:",
+  "remindSoundLabel": "提醒時間:",
+  "closeButton": "關閉",
+  "minutesUnit": "分",
+  "secondsUnit": "秒"
 }
