@@ -137,7 +137,7 @@ function App() {
     <div className="App">
       <div className="timer-display">
         {minutes === 0 && seconds === 0 ? (
-          <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || 'Time is up'}</span>
+          <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || 'Time is up!'}</span>
         ) : (
           <>
             {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.split('').map((char, index) => (
