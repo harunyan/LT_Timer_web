@@ -71,13 +71,15 @@ const Settings: React.FC<SettingsProps> = ({
         <h2>{translations.settingsTitle || 'Settings'}</h2>
         <div className="control-group">
           <label>{translations.languageLabel || 'Language:'}</label>
-          <select value={language} onChange={handleLanguageChange}>
-            {availableLanguages.map(lang => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <select value={language} onChange={handleLanguageChange}>
+              {availableLanguages.map(lang => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="control-group">
           <label>{translations.startTimeLabel || 'Start Time:'}</label>

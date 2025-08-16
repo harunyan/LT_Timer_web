@@ -154,7 +154,6 @@ button:last-child {
 .settings-panel .control-group {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .settings-panel h2 {
@@ -172,6 +171,10 @@ button:last-child {
   background-color: #fff; /* ライトモードの入力背景色 */
   color: #333; /* ライトモードの入力テキスト色 */
   border: 1px solid #ccc;
+}
+
+.settings-panel select {
+  font-size: 1.2rem;
 }
 
 .settings-panel button {
