@@ -20,6 +20,7 @@ interface SettingsProps {
   setRemindSeconds: (value: number) => void;
   language: string;
   setLanguage: (language: string) => void;
+  translations: { [key: string]: string };
   onClose: () => void; // 設定画面を閉じるためのコールバック
 }
 
@@ -38,6 +39,7 @@ const Settings: React.FC<SettingsProps> = ({
   setRemindSeconds,
   language,
   setLanguage,
+  translations,
   onClose,
 }) => {
   const [availableLanguages, setAvailableLanguages] = useState<Language[]>([]);
@@ -57,9 +59,9 @@ const Settings: React.FC<SettingsProps> = ({
 
   return (
     <div className="settings-panel">
-      <h2>Settings</h2>
+      <h2>{translations.settingsTitle || 'Settings'}</h2>
       <div className="control-group">
-        <label>Language:</label>
+        <label>{translations.languageLabel || 'Language:'}</label>
         <select value={language} onChange={handleLanguageChange}>
           {availableLanguages.map(lang => (
             <option key={lang.code} value={lang.code}>
@@ -69,7 +71,7 @@ const Settings: React.FC<SettingsProps> = ({
         </select>
       </div>
       <div className="control-group">
-        <label>Start Time:</label>
+        <label>{translations.startTimeLabel || 'Start Time:'}</label>
         <div>
           <input
             type="number"
@@ -81,7 +83,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
           />
-          <span>min</span>
+          <span>{translations.minutesUnit || 'min'}</span>
           <input
             type="number"
             value={initialSeconds}
@@ -94,11 +96,11 @@ const Settings: React.FC<SettingsProps> = ({
             max="59"
             step="5"
           />
-          <span>sec</span>
+          <span>{translations.secondsUnit || 'sec'}</span>
         </div>
       </div>
       <div className="control-group">
-        <label>Play Start Sound at:</label>
+        <label>{translations.startSoundLabel || 'Play Start Sound at:'}</label>
         <div>
           <input
             type="number"
@@ -110,7 +112,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
           />
-          <span>min</span>
+          <span>{translations.minutesUnit || 'min'}</span>
           <input
             type="number"
             value={startSoundSeconds}
@@ -123,11 +125,11 @@ const Settings: React.FC<SettingsProps> = ({
             max="59"
             step="5"
           />
-          <span>sec</span>
+          <span>{translations.secondsUnit || 'sec'}</span>
         </div>
       </div>
       <div className="control-group">
-        <label>Remind Sound at:</label>
+        <label>{translations.remindSoundLabel || 'Remind Sound at:'}</label>
         <div>
           <input
             type="number"
@@ -139,7 +141,7 @@ const Settings: React.FC<SettingsProps> = ({
             }}
             min="0"
           />
-          <span>min</span>
+          <span>{translations.minutesUnit || 'min'}</span>
           <input
             type="number"
             value={remindSeconds}
@@ -152,10 +154,10 @@ const Settings: React.FC<SettingsProps> = ({
             max="59"
             step="5"
           />
-          <span>sec</span>
+          <span>{translations.secondsUnit || 'sec'}</span>
         </div>
       </div>
-      <button onClick={onClose}>Close</button>
+      <button onClick={onClose}>{translations.closeButton || 'Close'}</button>
     </div>
   );
 };

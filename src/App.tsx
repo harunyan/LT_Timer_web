@@ -171,6 +171,7 @@ function App() {
           setRemindSeconds={setRemindSeconds}
           language={language}
           setLanguage={setLanguage}
+          translations={translations}
           onClose={() => setShowSettings(false)}
         />
       )}

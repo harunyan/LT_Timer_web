@@ -1,7 +1,15 @@
 {
   "languageName": "English",
-  "timeIsUp": "Time is up!",
+  "timeIsUp": "Time is Up!",
   "start": "Start",
   "stop": "Stop",
-  "reset": "Reset"
+  "reset": "Reset",
+  "settingsTitle": "Settings",
+  "languageLabel": "Language:",
+  "startTimeLabel": "Initial Time:",
+  "startSoundLabel": "Notification at:",
+  "remindSoundLabel": "Reminder at:",
+  "closeButton": "Close",
+  "minutesUnit": "min",
+  "secondsUnit": "sec"
 }
