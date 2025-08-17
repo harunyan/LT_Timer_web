@@ -3,27 +3,27 @@ import './App.css';
 import Settings from './Settings';
 import AudioPlayer from './components/AudioPlayer.tsx';
 
-interface Time {
+export interface Time {
   minutes: number;
   seconds: number;
 }
 
+export interface AllTimes {
+  initialTime: Time;
+  startSoundTime: Time;
+  remindTime: Time;
+}
+
 function App() {
-  const [initialTime, setInitialTime] = useState<Time>(() => {
-    const savedTime = localStorage.getItem('initialTime');
-    return savedTime ? JSON.parse(savedTime) : { minutes: 5, seconds: 0 };
-  });
-  const [startSoundTime, setStartSoundTime] = useState<Time>(() => {
-    const savedTime = localStorage.getItem('startSoundTime');
-    return savedTime ? JSON.parse(savedTime) : { minutes: 5, seconds: 0 };
-  });
-  const [remindTime, setRemindTime] = useState<Time>(() => {
-    const savedTime = localStorage.getItem('remindTime');
-    return savedTime ? JSON.parse(savedTime) : { minutes: 1, seconds: 0 };
+  const [allTimes, setAllTimes] = useState<AllTimes>(() => {
+    const initialTime = JSON.parse(localStorage.getItem('initialTime') || '{"minutes": 5, "seconds": 0}');
+    const startSoundTime = JSON.parse(localStorage.getItem('startSoundTime') || '{"minutes": 5, "seconds": 0}');
+    const remindTime = JSON.parse(localStorage.getItem('remindTime') || '{"minutes": 1, "seconds": 0}');
+    return { initialTime, startSoundTime, remindTime };
   });
 
-  const [minutes, setMinutes] = useState(initialTime.minutes);
-  const [seconds, setSeconds] = useState(initialTime.seconds);
+  const [minutes, setMinutes] = useState(allTimes.initialTime.minutes);
+  const [seconds, setSeconds] = useState(allTimes.initialTime.seconds);
   const [isActive, setIsActive] = useState(false);
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -37,9 +37,9 @@ function App() {
   const endAudioRef = useRef<HTMLAudioElement>(null);
   const remindAudioRef = useRef<HTMLAudioElement>(null);
 
-  const totalInitialSeconds = initialTime.minutes * 60 + initialTime.seconds;
-  const startSoundTotalSeconds = startSoundTime.minutes * 60 + startSoundTime.seconds;
-  const remindSoundTotalSeconds = remindTime.minutes * 60 + remindTime.seconds;
+  const totalInitialSeconds = allTimes.initialTime.minutes * 60 + allTimes.initialTime.seconds;
+  const startSoundTotalSeconds = allTimes.startSoundTime.minutes * 60 + allTimes.startSoundTime.seconds;
+  const remindSoundTotalSeconds = allTimes.remindTime.minutes * 60 + allTimes.remindTime.seconds;
 
   useEffect(() => {
     const fetchTranslations = async () => {
@@ -57,10 +57,10 @@ function App() {
 
   useEffect(() => {
     if (!isActive) {
-      setMinutes(initialTime.minutes);
-      setSeconds(initialTime.seconds);
+      setMinutes(allTimes.initialTime.minutes);
+      setSeconds(allTimes.initialTime.seconds);
     }
-  }, [initialTime, isActive]);
+  }, [allTimes.initialTime, isActive]);
 
   useEffect(() => {
     let interval: number | undefined = undefined;
@@ -102,9 +102,9 @@ function App() {
     }
 
     // タイマーが初期状態または0に達した場合、初期時間から開始します
-    if ((minutes === initialTime.minutes && seconds === initialTime.seconds) || (minutes === 0 && seconds === 0)) {
-      setMinutes(initialTime.minutes);
-      setSeconds(initialTime.seconds);
+    if ((minutes === allTimes.initialTime.minutes && seconds === allTimes.initialTime.seconds) || (minutes === 0 && seconds === 0)) {
+      setMinutes(allTimes.initialTime.minutes);
+      setSeconds(allTimes.initialTime.seconds);
       setIsActive(true);
       // 初期時間と開始音の時間が同じ場合は、すぐに開始音を再生します
       if (totalInitialSeconds === startSoundTotalSeconds) {
@@ -122,8 +122,8 @@ function App() {
 
   const handleReset = () => {
     setIsActive(false);
-    setMinutes(initialTime.minutes);
-    setSeconds(initialTime.seconds);
+    setMinutes(allTimes.initialTime.minutes);
+    setSeconds(allTimes.initialTime.seconds);
     setCharacterActive(false); // キャラクターをリセットする
   };
 
@@ -172,12 +172,8 @@ function App() {
 
       <Settings
         show={showSettings}
-        initialTime={initialTime}
-        setInitialTime={setInitialTime}
-        startSoundTime={startSoundTime}
-        setStartSoundTime={setStartSoundTime}
-        remindTime={remindTime}
-        setRemindTime={setRemindTime}
+        allTimes={allTimes}
+        setAllTimes={setAllTimes}
         language={language}
         setLanguage={setLanguage}
         translations={translations}

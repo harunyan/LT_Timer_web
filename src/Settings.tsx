@@ -1,20 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import LanguageSelector from './components/LanguageSelector.tsx';
 import TimeInputGroup from './components/TimeInputGroup.tsx';
-
-interface Time {
-  minutes: number;
-  seconds: number;
-}
+import { AllTimes, Time } from './App.tsx';
 
 interface SettingsProps {
   show: boolean;
-  initialTime: Time;
-  setInitialTime: (time: Time) => void;
-  startSoundTime: Time;
-  setStartSoundTime: (time: Time) => void;
-  remindTime: Time;
-  setRemindTime: (time: Time) => void;
+  allTimes: AllTimes;
+  setAllTimes: (times: AllTimes) => void;
   language: string;
   setLanguage: (language: string) => void;
   translations: { [key: string]: string };
@@ -23,20 +15,14 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({
   show,
-  initialTime,
-  setInitialTime,
-  startSoundTime,
-  setStartSoundTime,
-  remindTime,
-  setRemindTime,
+  allTimes,
+  setAllTimes,
   language,
   setLanguage,
   translations,
   onClose,
 }) => {
-  const [tempInitialTime, setTempInitialTime] = useState(initialTime);
-  const [tempStartSoundTime, setTempStartSoundTime] = useState(startSoundTime);
-  const [tempRemindTime, setTempRemindTime] = useState(remindTime);
+  const [tempAllTimes, setTempAllTimes] = useState<AllTimes>(allTimes);
 
   const [englishTranslations, setEnglishTranslations] = useState<{ [key: string]: string }>({});
 
@@ -50,20 +36,16 @@ const Settings: React.FC<SettingsProps> = ({
 
   useEffect(() => {
     if (show) {
-      setTempInitialTime(initialTime);
-      setTempStartSoundTime(startSoundTime);
-      setTempRemindTime(remindTime);
+      setTempAllTimes(allTimes);
     }
-  }, [show, initialTime, startSoundTime, remindTime]);
+  }, [show, allTimes]);
 
   const handleOk = () => {
-    setInitialTime(tempInitialTime);
-    setStartSoundTime(tempStartSoundTime);
-    setRemindTime(tempRemindTime);
+    setAllTimes(tempAllTimes);
 
-    localStorage.setItem('initialTime', JSON.stringify(tempInitialTime));
-    localStorage.setItem('startSoundTime', JSON.stringify(tempStartSoundTime));
-    localStorage.setItem('remindTime', JSON.stringify(tempRemindTime));
+    localStorage.setItem('initialTime', JSON.stringify(tempAllTimes.initialTime));
+    localStorage.setItem('startSoundTime', JSON.stringify(tempAllTimes.startSoundTime));
+    localStorage.setItem('remindTime', JSON.stringify(tempAllTimes.remindTime));
 
     onClose();
   };
@@ -91,22 +73,22 @@ const Settings: React.FC<SettingsProps> = ({
 
         <TimeInputGroup
           label={translations.startTimeLabel || englishTranslations.startTimeLabel}
-          time={tempInitialTime}
-          setTime={setTempInitialTime}
+          time={tempAllTimes.initialTime}
+          setTime={(newTime: Time) => setTempAllTimes(prev => ({ ...prev, initialTime: newTime }))}
           translations={translations}
         />
 
         <TimeInputGroup
           label={translations.startSoundLabel || englishTranslations.startSoundLabel}
-          time={tempStartSoundTime}
-          setTime={setTempStartSoundTime}
+          time={tempAllTimes.startSoundTime}
+          setTime={(newTime: Time) => setTempAllTimes(prev => ({ ...prev, startSoundTime: newTime }))}
           translations={translations}
         />
 
         <TimeInputGroup
           label={translations.remindSoundLabel || englishTranslations.remindSoundLabel}
-          time={tempRemindTime}
-          setTime={setTempRemindTime}
+          time={tempAllTimes.remindTime}
+          setTime={(newTime: Time) => setTempAllTimes(prev => ({ ...prev, remindTime: newTime }))}
           translations={translations}
         />
 
