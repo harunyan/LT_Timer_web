@@ -56,6 +56,13 @@ function App() {
   }, [language]);
 
   useEffect(() => {
+    if (!isActive) {
+      setMinutes(initialTime.minutes);
+      setSeconds(initialTime.seconds);
+    }
+  }, [initialTime, isActive]);
+
+  useEffect(() => {
     let interval: number | undefined = undefined;
 
     if (isActive) {
