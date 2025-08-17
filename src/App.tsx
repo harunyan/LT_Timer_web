@@ -3,34 +3,27 @@ import './App.css';
 import Settings from './Settings';
 import AudioPlayer from './components/AudioPlayer.tsx';
 
+interface Time {
+  minutes: number;
+  seconds: number;
+}
+
 function App() {
-  const [initialMinutes, setInitialMinutes] = useState(() => {
-    const savedMinutes = localStorage.getItem('initialMinutes');
-    return savedMinutes ? parseInt(savedMinutes, 10) : 5;
+  const [initialTime, setInitialTime] = useState<Time>(() => {
+    const savedTime = localStorage.getItem('initialTime');
+    return savedTime ? JSON.parse(savedTime) : { minutes: 5, seconds: 0 };
   });
-  const [initialSeconds, setInitialSeconds] = useState(() => {
-    const savedSeconds = localStorage.getItem('initialSeconds');
-    return savedSeconds ? parseInt(savedSeconds, 10) : 0;
+  const [startSoundTime, setStartSoundTime] = useState<Time>(() => {
+    const savedTime = localStorage.getItem('startSoundTime');
+    return savedTime ? JSON.parse(savedTime) : { minutes: 5, seconds: 0 };
   });
-  const [startSoundMinutes, setStartSoundMinutes] = useState(() => {
-    const savedStartSoundMinutes = localStorage.getItem('startSoundMinutes');
-    return savedStartSoundMinutes ? parseInt(savedStartSoundMinutes, 10) : 5;
-  });
-  const [startSoundSeconds, setStartSoundSeconds] = useState(() => {
-    const savedStartSoundSeconds = localStorage.getItem('startSoundSeconds');
-    return savedStartSoundSeconds ? parseInt(savedStartSoundSeconds, 10) : 0;
-  });
-  const [remindMinutes, setRemindMinutes] = useState(() => {
-    const savedRemindMinutes = localStorage.getItem('remindMinutes');
-    return savedRemindMinutes ? parseInt(savedRemindMinutes, 10) : 1;
-  });
-  const [remindSeconds, setRemindSeconds] = useState(() => {
-    const savedRemindSeconds = localStorage.getItem('remindSeconds');
-    return savedRemindSeconds ? parseInt(savedRemindSeconds, 10) : 0;
+  const [remindTime, setRemindTime] = useState<Time>(() => {
+    const savedTime = localStorage.getItem('remindTime');
+    return savedTime ? JSON.parse(savedTime) : { minutes: 1, seconds: 0 };
   });
 
-  const [minutes, setMinutes] = useState(initialMinutes);
-  const [seconds, setSeconds] = useState(initialSeconds);
+  const [minutes, setMinutes] = useState(initialTime.minutes);
+  const [seconds, setSeconds] = useState(initialTime.seconds);
   const [isActive, setIsActive] = useState(false);
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -44,9 +37,9 @@ function App() {
   const endAudioRef = useRef<HTMLAudioElement>(null);
   const remindAudioRef = useRef<HTMLAudioElement>(null);
 
-  const totalInitialSeconds = initialMinutes * 60 + initialSeconds;
-  const startSoundTotalSeconds = startSoundMinutes * 60 + startSoundSeconds;
-  const remindSoundTotalSeconds = remindMinutes * 60 + remindSeconds;
+  const totalInitialSeconds = initialTime.minutes * 60 + initialTime.seconds;
+  const startSoundTotalSeconds = startSoundTime.minutes * 60 + startSoundTime.seconds;
+  const remindSoundTotalSeconds = remindTime.minutes * 60 + remindTime.seconds;
 
   useEffect(() => {
     const fetchTranslations = async () => {
@@ -94,7 +87,7 @@ function App() {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, minutes, seconds, startSoundTotalSeconds, initialMinutes, initialSeconds]);
+  }, [isActive, minutes, seconds, startSoundTotalSeconds, remindSoundTotalSeconds]);
 
   const handleStart = () => {
     if (isActive) {
@@ -102,9 +95,9 @@ function App() {
     }
 
     // タイマーが初期状態または0に達した場合、初期時間から開始します
-    if ((minutes === initialMinutes && seconds === initialSeconds) || (minutes === 0 && seconds === 0)) {
-      setMinutes(initialMinutes);
-      setSeconds(initialSeconds);
+    if ((minutes === initialTime.minutes && seconds === initialTime.seconds) || (minutes === 0 && seconds === 0)) {
+      setMinutes(initialTime.minutes);
+      setSeconds(initialTime.seconds);
       setIsActive(true);
       // 初期時間と開始音の時間が同じ場合は、すぐに開始音を再生します
       if (totalInitialSeconds === startSoundTotalSeconds) {
@@ -122,8 +115,8 @@ function App() {
 
   const handleReset = () => {
     setIsActive(false);
-    setMinutes(initialMinutes);
-    setSeconds(initialSeconds);
+    setMinutes(initialTime.minutes);
+    setSeconds(initialTime.seconds);
     setCharacterActive(false); // キャラクターをリセットする
   };
 
@@ -172,18 +165,12 @@ function App() {
 
       <Settings
         show={showSettings}
-        initialMinutes={initialMinutes}
-        setInitialMinutes={setInitialMinutes}
-        initialSeconds={initialSeconds}
-        setInitialSeconds={setInitialSeconds}
-        startSoundMinutes={startSoundMinutes}
-        setStartSoundMinutes={setStartSoundMinutes}
-        startSoundSeconds={startSoundSeconds}
-        setStartSoundSeconds={setStartSoundSeconds}
-        remindMinutes={remindMinutes}
-        setRemindMinutes={setRemindMinutes}
-        remindSeconds={remindSeconds}
-        setRemindSeconds={setRemindSeconds}
+        initialTime={initialTime}
+        setInitialTime={setInitialTime}
+        startSoundTime={startSoundTime}
+        setStartSoundTime={setStartSoundTime}
+        remindTime={remindTime}
+        setRemindTime={setRemindTime}
         language={language}
         setLanguage={setLanguage}
         translations={translations}

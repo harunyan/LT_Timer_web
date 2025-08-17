@@ -2,20 +2,19 @@ import React, {useEffect, useState} from 'react';
 import LanguageSelector from './components/LanguageSelector.tsx';
 import TimeInputGroup from './components/TimeInputGroup.tsx';
 
+interface Time {
+  minutes: number;
+  seconds: number;
+}
+
 interface SettingsProps {
   show: boolean;
-  initialMinutes: number;
-  setInitialMinutes: (value: number) => void;
-  initialSeconds: number;
-  setInitialSeconds: (value: number) => void;
-  startSoundMinutes: number;
-  setStartSoundMinutes: (value: number) => void;
-  startSoundSeconds: number;
-  setStartSoundSeconds: (value: number) => void;
-  remindMinutes: number;
-  setRemindMinutes: (value: number) => void;
-  remindSeconds: number;
-  setRemindSeconds: (value: number) => void;
+  initialTime: Time;
+  setInitialTime: (time: Time) => void;
+  startSoundTime: Time;
+  setStartSoundTime: (time: Time) => void;
+  remindTime: Time;
+  setRemindTime: (time: Time) => void;
   language: string;
   setLanguage: (language: string) => void;
   translations: { [key: string]: string };
@@ -24,18 +23,12 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({
   show,
-  initialMinutes,
-  setInitialMinutes,
-  initialSeconds,
-  setInitialSeconds,
-  startSoundMinutes,
-  setStartSoundMinutes,
-  startSoundSeconds,
-  setStartSoundSeconds,
-  remindMinutes,
-  setRemindMinutes,
-  remindSeconds,
-  setRemindSeconds,
+  initialTime,
+  setInitialTime,
+  startSoundTime,
+  setStartSoundTime,
+  remindTime,
+  setRemindTime,
   language,
   setLanguage,
   translations,
@@ -70,34 +63,25 @@ const Settings: React.FC<SettingsProps> = ({
 
         <TimeInputGroup
           label={translations.startTimeLabel || englishTranslations.startTimeLabel}
-          minutes={initialMinutes}
-          setMinutes={setInitialMinutes}
-          seconds={initialSeconds}
-          setSeconds={setInitialSeconds}
-          minutesLocalStorageKey="initialMinutes"
-          secondsLocalStorageKey="initialSeconds"
+          time={initialTime}
+          setTime={setInitialTime}
+          timeLocalStorageKey="initialTime"
           translations={translations}
         />
 
         <TimeInputGroup
           label={translations.startSoundLabel || englishTranslations.startSoundLabel}
-          minutes={startSoundMinutes}
-          setMinutes={setStartSoundMinutes}
-          seconds={startSoundSeconds}
-          setSeconds={setStartSoundSeconds}
-          minutesLocalStorageKey="startSoundMinutes"
-          secondsLocalStorageKey="startSoundSeconds"
+          time={startSoundTime}
+          setTime={setStartSoundTime}
+          timeLocalStorageKey="startSoundTime"
           translations={translations}
         />
 
         <TimeInputGroup
           label={translations.remindSoundLabel || englishTranslations.remindSoundLabel}
-          minutes={remindMinutes}
-          setMinutes={setRemindMinutes}
-          seconds={remindSeconds}
-          setSeconds={setRemindSeconds}
-          minutesLocalStorageKey="remindMinutes"
-          secondsLocalStorageKey="remindSeconds"
+          time={remindTime}
+          setTime={setRemindTime}
+          timeLocalStorageKey="remindTime"
           translations={translations}
         />
 
