@@ -131,7 +131,7 @@ function App() {
     <div className="App">
       <div className="timer-display">
         {minutes === 0 && seconds === 0 ? (
-          <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || 'Time is up!'}</span>
+          <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || englishTranslations.timeIsUp}</span>
         ) : (
           <>
             {`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`.split('').map((char, index) => (
@@ -146,11 +146,11 @@ function App() {
 
       <div className="controls">
         {!isActive ? (
-          <button onClick={handleStart}>{translations.start || 'Start'}</button>
+          <button onClick={handleStart}>{translations.start || englishTranslations.start}</button>
         ) : (
-          <button onClick={handleStop}>{translations.stop || 'Stop'}</button>
+          <button onClick={handleStop}>{translations.stop || englishTranslations.stop}</button>
         )}
-        <button onClick={handleReset}>{translations.reset || 'Reset'}</button>
+        <button onClick={handleReset}>{translations.reset || englishTranslations.reset}</button>
         <button onClick={() => setShowSettings(true)}>⚙️</button>
       </div>
 
