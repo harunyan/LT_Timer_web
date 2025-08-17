@@ -60,6 +60,7 @@ button {
   margin: 0 0.5rem;
   padding: 0.7rem 1.5rem; /* ボタンのパディングを増やす */
   font-size: 1.2rem; /* ボタンのフォントサイズを大きく */
+  min-height: 4.0rem; /* 言語によって異なる高さになるので最小高さを設定 */
 }
 
 button:last-child {
