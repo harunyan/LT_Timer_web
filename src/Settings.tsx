@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import LanguageSelector from './components/LanguageSelector.tsx';
 import TimeInputGroup from './components/TimeInputGroup.tsx';
 
@@ -47,6 +47,16 @@ const Settings: React.FC<SettingsProps> = ({
     }
   };
 
+  const [englishTranslations, setEnglishTranslations] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+      const fetchTranslations = async () => {
+          const enTranslations = await fetch(import.meta.env.BASE_URL + 'locales/en.json').then(res => res.json());
+          setEnglishTranslations(enTranslations);
+      }
+      fetchTranslations();
+  }, [])
+
   return (
     <div className={`settings-panel-wrapper ${show ? 'active' : ''}`} onClick={handleBackdropClick}>
       <div className="settings-panel">
@@ -59,7 +69,7 @@ const Settings: React.FC<SettingsProps> = ({
         />
 
         <TimeInputGroup
-          label={translations.startTimeLabel || 'Initial Time:'}
+          label={translations.startTimeLabel || englishTranslations.startTimeLabel}
           minutes={initialMinutes}
           setMinutes={setInitialMinutes}
           seconds={initialSeconds}
@@ -70,7 +80,7 @@ const Settings: React.FC<SettingsProps> = ({
         />
 
         <TimeInputGroup
-          label={translations.startSoundLabel || 'Notification at:'}
+          label={translations.startSoundLabel || englishTranslations.startSoundLabel}
           minutes={startSoundMinutes}
           setMinutes={setStartSoundMinutes}
           seconds={startSoundSeconds}
@@ -81,7 +91,7 @@ const Settings: React.FC<SettingsProps> = ({
         />
 
         <TimeInputGroup
-          label={translations.remindSoundLabel || 'Reminder at:'}
+          label={translations.remindSoundLabel || englishTranslations.remindSoundLabel}
           minutes={remindMinutes}
           setMinutes={setRemindMinutes}
           seconds={remindSeconds}
@@ -91,7 +101,7 @@ const Settings: React.FC<SettingsProps> = ({
           translations={translations}
         />
 
-        <button onClick={onClose}>{translations.closeButton || 'Close'}</button>
+        <button onClick={onClose}>{translations.closeButton || englishTranslations.closeButton}</button>
       </div>
     </div>
   );
