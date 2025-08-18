@@ -25,6 +25,7 @@ function App() {
   const [minutes, setMinutes] = useState(allTimes.initialTime.minutes);
   const [seconds, setSeconds] = useState(allTimes.initialTime.seconds);
   const [isActive, setIsActive] = useState(false);
+  const [isTimeUp, setIsTimeUp] = useState(false);
   const [characterActive, setCharacterActive] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [translations, setTranslations] = useState<{ [key: string]: string }>({});
@@ -56,11 +57,11 @@ function App() {
   }, [language]);
 
   useEffect(() => {
-    if (!isActive) {
+    if (!isActive && !isTimeUp) {
       setMinutes(allTimes.initialTime.minutes);
       setSeconds(allTimes.initialTime.seconds);
     }
-  }, [allTimes.initialTime, isActive]);
+  }, [allTimes.initialTime, isActive, isTimeUp]);
 
   useEffect(() => {
     let interval: number | undefined = undefined;
@@ -84,6 +85,7 @@ function App() {
             endAudioRef.current?.play();
             setIsActive(false); // タイマーが0になった瞬間にisActiveをfalseにする
             setCharacterActive(false); // キャラクターを非アクティブにする
+            setIsTimeUp(true);
           }
         } else {
           setIsActive(false);
@@ -101,6 +103,7 @@ function App() {
       return; // すでにアクティブな場合は何もしない
     }
 
+    setIsTimeUp(false);
     // タイマーが初期状態または0に達した場合、初期時間から開始します
     if ((minutes === allTimes.initialTime.minutes && seconds === allTimes.initialTime.seconds) || (minutes === 0 && seconds === 0)) {
       setMinutes(allTimes.initialTime.minutes);
@@ -122,6 +125,7 @@ function App() {
 
   const handleReset = () => {
     setIsActive(false);
+    setIsTimeUp(false);
     setMinutes(allTimes.initialTime.minutes);
     setSeconds(allTimes.initialTime.seconds);
     setCharacterActive(false); // キャラクターをリセットする
@@ -130,7 +134,7 @@ function App() {
   return (
     <div className="App">
       <div className="timer-display">
-        {minutes === 0 && seconds === 0 ? (
+        {isTimeUp ? (
           <span className="time-is-up" style={{ color: 'red' }}>{translations.timeIsUp || englishTranslations.timeIsUp}</span>
         ) : (
           <>
